@@ -1,0 +1,24 @@
+{
+  "name": "kyk_uptime",
+  "version": "1.0.0",
+  "description": "Uptime monitor using curl",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludovitkramar/kyk_uptime.git"
+  },
+  "author": "Ludovit Kramar",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/ludovitkramar/kyk_uptime/issues"
+  },
+  "homepage": "https://github.com/ludovitkramar/kyk_uptime#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}
