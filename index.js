@@ -1,11 +1,20 @@
-const express = require('express');
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const PORT = process.env.PORT || 8888;
+var express = require('express');
+var app = express();
 
-app.use(express.static('public')); // Serve Static Assets
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
-server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+// use res.render to load up an ejs view file
+
+// index page
+app.get('/', function(req, res) {
+  res.render('pages/index');
 });
+
+// about page
+app.get('/about', function(req, res) {
+  res.render('pages/about');
+});
+
+app.listen(8080);
+console.log('Server is listening on port 8080');

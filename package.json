@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ludovitkramar/kyk_uptime#readme",
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "sqlite3": "^5.0.2"
   }
