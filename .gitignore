@@ -10,3 +10,5 @@ lerna-debug.log*
 node_modules/
 
 message.txt
+
+logger.conf
