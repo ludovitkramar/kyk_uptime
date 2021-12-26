@@ -1,60 +1,121 @@
 const http = require('http');
 const { spawn } = require('child_process');
 const fs = require('fs');
-const PORT = 8081;
 
-const curlTests = { //TODO: store test on a separate file for ease of management
-  kykvitCurl: ['-I', 'https://kykvit.com'],
-  kykvitExpected: "", //TODO: accept the curl as valid when everything specified here is found in stdout of curl.
-  anotherCurl: "",
-  anotherExpected: "",
-};
+var curlTestsDefinitions = {};
+var PORT = 8080;
+var interval = 10000;
+var command = 'curl';
+var testNames = [];
 
-var curlLog = []; //TODO: open log file and continue it
-
-function curl() {
-  const test = spawn('curl', curlTests.kykvitCurl);
-
-  test.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-    data = curlBeautifier(data);
-    curlLog.push([Date.now(),data]);
-    console.log(curlLog);
-    storeLog(curlLog);
-  });
-
-  // test.stderr.on('data', (data) => {
-  //   console.error(`stderr: ${data}`);
-  // });
-
-  // test.on('close', (code) => {
-  //   console.log(`child process exited with code ${code}`);
-  // });
+try { //open config file
+  const configfile = fs.readFileSync("logger.conf").toString();
+  curlTestsDefinitions = JSON.parse(configfile);
+  PORT = curlTestsDefinitions["PORT"];
+  interval = curlTestsDefinitions["INTERVAL"];
+  command = curlTestsDefinitions["COMMAND"];
+} catch (error) {
+  throw 'ERROR when trying to open and parse the config file.'
 }
 
+class curlTest {
+  testsLog = [];
+  constructor (testName, test, expected) {
+    this.testName = testName;
+    this.test = test;
+    this.expected = expected;
+    console.log(`${this.testName} is active`);
+    this.performTest();
+    var self = this;
+    var curlInterval = setInterval(function() {
+      console.log(`Interval reached every ${interval}ms`);
+      self.performTest();
+    }, interval);
+  }
 
-function curlBeautifier(data) { //TODO: remove line breaks from curl's output.
-  return data.toString('utf8'); 
-};
+  performTest() {
+    const curlTest = spawn(command, this.test);
+    curlTest.stdout.on('data', (data) => {
+      //console.log(`stdout: ${data}`);
+      var result = this.processData(data);
+      var toLog = ([Date.now(),result]);
+      //console.log(toLog);
+      this.storeLog(toLog);
+    });
+    curlTest.stderr.on('data', (data) => {
+      //console.log('curl error:' + data)
+      this.errorLog([Date.now(),'stderr',data.toString()]);
+    })
+    console.log(`A test has been performed for ${this.testName}.`);
+  }
 
+  processData(data) { //returns a number: 0=down, 1=up, 2=test was partially succesful, 3=mysterious error
+    const str = data.toString('utf8'); 
+    var match = false; //turns true when found a match
+    var mismatch = false; //turns true when didn't find a match
+    for (key in this.expected) {
+      if (str.indexOf(this.expected[key]) != -1) {
+        match = true;
+      } else {
+        mismatch = true;
+      }
+    }
+    if (match == false && mismatch == true) {
+      //completely wrong data
+      this.errorLog([Date.now(),"badResponse",str]);
+      return 0
+    } else if (match == true && mismatch == true) {
+      //some test passed, some did not
+      this.errorLog([Date.now(),"partialResponse",str]);
+      return 2
+    } else if (match == true && mismatch == false) {
+      //all tests passed! congratulations!
+      return 1
+    } else if (match == false && mismatch == false) {
+      //error, this shouldn't happen
+      this.errorLog([Date.now(),"horribleError",str]);
+      return 3
+    };
+  };
+  
+  storeLog(data) {
+    let fd;
+    try {
+      fd = fs.openSync(`${this.testName}.log`, 'a');
+      fs.appendFileSync(fd, JSON.stringify(data) + '\r\n', 'utf8');
+    } catch (err) {
+      console.error('storeLog error.')
+    } finally {
+      if (fd !== undefined)
+        fs.closeSync(fd);
+    }
+    console.log(`Logged the test for ${this.testName}`);
+  }
 
-function storeLog(data) {
-  let fd;
-
-  try {
-    fd = fs.openSync('message.txt', 'a');
-    fs.appendFileSync(fd, JSON.stringify(data) + '\r\n', 'utf8');
-  } catch (err) {
-    console.error('storeLog error.')
-  } finally {
-    if (fd !== undefined)
-      fs.closeSync(fd);
+  errorLog(data) {
+    let fd;
+    try {
+      fd = fs.openSync(`${this.testName}-errors.log`, 'a');
+      fs.appendFileSync(fd, JSON.stringify(data) + '\r\n', 'utf8');
+    } catch (err) {
+      console.error('error when logging an error')
+    } finally {
+      if (fd !== undefined)
+        fs.closeSync(fd);
+    }
+    console.log(`Logged an error for ${this.testName}`);
   }
 };
 
-
-curl();
-
+for (key in curlTestsDefinitions) { //create the objects
+  if (key.indexOf("Test") != -1) {
+    test = curlTestsDefinitions[key]; // array of arguments for curl
+    testName = key.slice(0,key.indexOf("Test")); //name of the test
+    expected = curlTestsDefinitions[`${testName}Expected`]; //array of strings that should be found in the output of curl.
+    eval(`var ${key} = new curlTest(testName, test, expected)`); //create curlTest object with the name it was given in the definitions array.
+    testNames.push(testName);
+  }
+}
 
 function requestListener(req, res) {
   res.writeHead(200);
