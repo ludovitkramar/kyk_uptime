@@ -133,19 +133,22 @@ function requestListener(req, res) {
       res.writeHead(200, { "Content-Type": "image/x-icon" });
       res.end(data);
     })
+  } else if (req.url === "/tests.json") {
+    res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+    res.end(JSON.stringify(testNames));
   } else if (req.url.slice(req.url.length - 4, req.url.length) === ".log") {
     const reqLog = req.url.slice(1, req.url.length - 4);
     if (testNames.indexOf(reqLog) != -1) {
       fs.readFile(`${reqLog}.log`, function (err, data) {
-        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8"});
+        res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
         res.end(data);
       })
     } else {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8"});
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
       res.end('Log not found');
     }
   } else {
-    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8"});
+    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
     res.end('Not found');
   }
 }
