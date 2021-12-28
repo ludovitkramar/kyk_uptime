@@ -138,6 +138,11 @@ function requestListener(req, res) {
       res.writeHead(200, { "Content-Type": "font/otf" });
       res.end(data);
     })
+  } else if (req.url === "/logger.conf") {
+    fs.readFile('logger.conf', function (err, data) {
+      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(data);
+    })
   } else if (req.url === "/tests.json") {
     res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     res.end(JSON.stringify(testNames));
