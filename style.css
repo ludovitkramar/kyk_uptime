@@ -1,3 +1,53 @@
+@font-face {
+    font-family: 'LMsans10';
+    src: url('/lmsans10-regular.otf')
+ }
+
+:root {
+    --bg: #ffffff;
+    --text: #111111;
+    --titletext: #ffffff;
+    --textalt: #e6e6e6;
+    --blockbg: #f2f2f2;
+    --blockbgalt: #5c5c5c;
+    --textAccent: #00AAD4;
+    --accentA: #03acd6;
+    --accentB: #3aad3a;
+    --gradientA1: #0079D6;
+    --gradientA2: #00C9FE;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1b1b1b;
+        --text: #ececec;
+        --titletext: #ffffff;
+        --textalt: #e6e6e6;
+        --blockbg: #363636;
+        --blockbgalt: #4d4d4d;
+        --textAccent: #2dc7ee;
+        --accentA: #1a5463;
+        --accentB: #205a20;
+        --gradientA1: #0079D6;
+        --gradientA2: #00C9FE;
+    }
+}
+
+*{
+    margin: 0;
+    font-family: 'LMsans10';
+}
+  
+html,body{
+    height: 100%
+}
+
 body {
-    background-color: aqua;
+    background-color: var(--bg);
+}
+
+@media screen and (max-width: 800px) {
+    body {
+        background-color: bisque;
+    }
 }

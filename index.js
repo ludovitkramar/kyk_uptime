@@ -133,6 +133,11 @@ function requestListener(req, res) {
       res.writeHead(200, { "Content-Type": "image/x-icon" });
       res.end(data);
     })
+  } else if (req.url === "/lmsans10-regular.otf") {
+    fs.readFile('lmsans10-regular.otf', function (err, data) {
+      res.writeHead(200, { "Content-Type": "font/otf" });
+      res.end(data);
+    })
   } else if (req.url === "/tests.json") {
     res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     res.end(JSON.stringify(testNames));
