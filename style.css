@@ -33,7 +33,7 @@
     }
 }
 
-*{
+* {
     margin: 0;
     font-family: 'LMsans10';
 }
@@ -46,7 +46,12 @@ body {
     background-color: var(--bg);
 }
 
-@media screen and (max-width: 800px) {
+body > div {
+    width: 50em;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 50em) {
     body {
         background-color: bisque;
     }

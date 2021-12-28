@@ -1,16 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
   <meta name="author" content="Ludovit Kramar" />
-  <meta name="robots" content="index, follow"/>
+  <meta name="robots" content="index, follow" />
   <meta name="description" content="">
   <title>kyk Uptime Logger</title>
   <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
-
+  <div id="main">
+    <header>
+      <h1>kyk Uptime Monitor</h1>
+      <span>a simple uptime logger</span>
+    </header>
+    <fieldset>
+      <legend>Overview</legend>
+    </fieldset>
+    <div id="detailsBox">
+      Details:
+      <div>
+        <div class="detail"></div>
+        <div class="detail"></div>
+      </div>
+    </div>
+    <fieldset id="graphsBox">
+      <legend>Data & Graphs</legend>
+      <div id="test1">
+        <span class="testTitle">Test 1</span>
+        <div class="buttonsRow">
+          <div>All time</div>
+          <div>Today</div>
+        </div>
+        <svg class="graph" id="graphtest1"></svg>
+        <div class="graphPreviewBox">
+          <svg class="graphPreview" id="graphPreviewtest1"></svg>
+          <div class="graphLeftControll" id="graphLCtest1">2021-10-23</div>
+          <div class="graphRightControll" id="graphRCtest1">2021-11-22</div>
+        </div>
+      </div>
+    </fieldset>
+    <footer>
+      <ul>
+        <li><a href="https://github.com/ludovitkramar/kyk_uptime/">github</a></li>
+        <li><a href="https://kykvit.com">kykvit</a></li>
+        <li><a href="https://kykvit.com/privacy/">Privacy Policy</a></li>
+      </ul>
+    </footer>
+  </div>
 </body>
-</html>
 
+</html>
