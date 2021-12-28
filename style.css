@@ -36,6 +36,7 @@
 * {
     margin: 0;
     font-family: 'LMsans10';
+    color: var(--text);
 }
   
 html,body{
@@ -51,8 +52,25 @@ body > div {
     margin: 0 auto;
 }
 
+svg {
+    width: 100%;
+}
+
+svg.graph {
+    height: 5em;
+    background-color: cadetblue;
+}
+
+svg.graphPreview {
+    height: 3em;
+    background-color: azure;
+}
+
 @media screen and (max-width: 50em) {
-    body {
-        background-color: bisque;
+    body > div {
+        width: auto;
+        margin: 0;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
