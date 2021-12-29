@@ -1,0 +1,3 @@
+tasks:
+  - init: npm install && cp logger-sample.conf logger.conf
+    command: npm run start
