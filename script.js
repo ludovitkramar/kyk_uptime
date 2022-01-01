@@ -63,7 +63,7 @@ async function main() {
     }
 
     function populateOverview(testNames, interval) {
-        var str = `<span>There are ${testNames.length} tests being performed every ${Math.round(interval / 60)} seconds:</span><ol>`;
+        var str = `<span>There are ${testNames.length} tests being performed every ${Math.round(interval / 1000)} seconds:</span><ol>`;
         for (key in testNames) {
             //console.log(eval(`${testNames[key] + "Test"}`));
             str += `<li>${testNames[key]}</li>`
