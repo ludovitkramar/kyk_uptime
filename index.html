@@ -17,17 +17,12 @@
       <h1>kyk Uptime Monitor</h1>
       <span>a simple uptime logger</span>
     </header>
-    <fieldset>
+    <fieldset id="overview">
       <legend>Overview</legend>
     </fieldset>
-    <div id="detailsBox">
-      Details:
-      <div>
-        <div class="detail"></div>
-        <div class="detail"></div>
-      </div>
-      <iframe src="/logger.conf" frameborder="0" style="width: 100%;"></iframe>
-    </div>
+    <fieldset id="details">
+      <legend>Details</legend>
+    </fieldset>
     <fieldset id="graphsBox">
       <legend>Data & Graphs</legend>
       <div id="test1">
@@ -39,19 +34,24 @@
         <svg class="graph" id="graphtest1"></svg>
         <div class="graphPreviewBox">
           <svg class="graphPreview" id="graphPreviewtest1"></svg>
-          <div class="graphLeftControll" id="graphLCtest1">2021-10-23</div>
-          <div class="graphRightControll" id="graphRCtest1">2021-11-22</div>
+          <div class="graphLeftControll graphControll" id="graphLCtest1"></div>
+          <div class="graphRightControll graphControll" id="graphRCtest1"></div>
         </div>
       </div>
     </fieldset>
     <footer>
       <ul>
-        <li><a href="https://github.com/ludovitkramar/kyk_uptime/">github</a></li>
-        <li><a href="https://kykvit.com">kykvit</a></li>
+        <li>Source code and license availible on <a href="https://github.com/ludovitkramar/kyk_uptime/">github</a></li>
+      </ul>
+      <ul>
+        <li><a href="https://kykvit.com">kykvit.com</a></li>
         <li><a href="https://kykvit.com/privacy/">Privacy Policy</a></li>
       </ul>
     </footer>
   </div>
+  <script src="script.js">
+
+  </script>
 </body>
 
 </html>

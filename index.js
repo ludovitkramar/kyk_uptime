@@ -128,6 +128,11 @@ function requestListener(req, res) {
       res.writeHead(200, { "Content-Type": "text/css; charset=utf-8" });
       res.end(data);
     })
+  } else if (req.url === "/script.js") {
+    fs.readFile('script.js', function (err, data) {
+      res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8" });
+      res.end(data);
+    })
   } else if (req.url === "/favicon.ico") {
     fs.readFile('favicon.ico', function (err, data) {
       res.writeHead(200, { "Content-Type": "image/x-icon" });

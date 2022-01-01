@@ -40,7 +40,7 @@
 }
   
 html,body{
-    height: 100%
+    min-height: 100%
 }
 
 body {
@@ -58,12 +58,84 @@ svg {
 
 svg.graph {
     height: 5em;
-    background-color: cadetblue;
+    background-color: var(--blockbg);
 }
 
 svg.graphPreview {
     height: 3em;
-    background-color: azure;
+    background-color: var(--blockbg);
+}
+
+div.graphPreviewBox {
+    position: relative;
+}
+
+div.graphControll {
+    width: 10px;
+    background-color: var(--blockbgalt);
+    border: 1px solid var(--text);
+    height: 100%;
+    max-height: 100%;
+    cursor: grab;
+    top: 0;
+}
+
+div.graphControll:active {
+    cursor: grabbing;
+}
+
+div.graphLeftControll {
+    position:absolute;
+    left: 0;
+}
+
+div.graphLeftControll::after {
+    content: '2021-10-23';
+    background-color: violet;
+    border: 1px solid yellow;
+    width: max-content;
+    position: absolute;
+    max-width: 30vw;
+    left: 0;
+}
+
+div.graphRightControll {
+    position: absolute;
+    right: 0;
+}
+
+div.graphRightControll::after {
+    content: '2021-11-22';
+    background-color: violet;
+    border: 1px solid yellow;
+    width: max-content;
+    position: absolute;
+    max-width: 30vw;
+    right: 0;
+    bottom: 0;
+}
+
+code {
+    font-family: monospace;
+    background-color: var(--blockbg);
+}
+
+footer {
+    text-align: center;
+    background-color: var(--blockbgalt);
+    padding: 1em;
+    padding-bottom: 1.4em;
+    margin-top: .6em;
+}
+
+footer > ul > li {
+    display: inline;
+    margin-right: .3em;
+    color: var(--textalt);
+}
+
+footer > ul > li > a {
+    color: var(--textalt);
 }
 
 @media screen and (max-width: 50em) {
