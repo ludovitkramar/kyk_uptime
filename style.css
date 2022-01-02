@@ -62,7 +62,7 @@ svg.graph {
 }
 
 svg.graphPreview {
-    height: 3em;
+    height: 40px;
     background-color: var(--blockbg);
 }
 
@@ -123,15 +123,16 @@ code {
 footer {
     text-align: center;
     background-color: var(--blockbgalt);
-    padding: 1em;
-    padding-bottom: 1.4em;
-    margin-top: .6em;
+    padding: .6em;
+    padding-bottom: 1em;
+    margin-top: .3em;
 }
 
 footer > ul > li {
     display: inline;
     margin-right: .3em;
     color: var(--textalt);
+    font-size: .88em;
 }
 
 footer > ul > li > a {
