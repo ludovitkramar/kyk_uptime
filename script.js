@@ -32,7 +32,7 @@ class cTest {
                         if (loggerWasDown) {
                             const timeStamp = log[key * 1 - 1][0]
                             summary.push([timeStamp, 4])
-                        }                       
+                        }
                         summary.push(e);
                         lastState = e[1];
                     }
@@ -42,55 +42,100 @@ class cTest {
                 return summary
             }
             s.summary = makeSummary(s.log, s.interval); //create a summary
-            // var pSVGelement = document.createElement("SVG"); //create the preview
-            // pSVGelement.innerHTML = s.genPreviewSVG(s.summary);
-            // document.getElementById('test1').appendChild(pSVGelement);
+
+            function makePercentagesSummary(summary) {
+                // console.log(summary);
+                const first = summary[0][0];
+                const last = summary[summary.length - 1][0];
+                // console.log(first, last);
+                const dif = last - first;
+                function perc(cur) {
+                    return (cur - first) / dif;
+                }
+                let psum = [];
+                for (let index = 0; index < summary.length; index++) {
+                    const element = summary[index];
+                    psum.push([Math.round(perc(element[0]) * 10000) / 10000, element[1]]);
+                }
+                return psum;
+            }
+            s.psummary = makePercentagesSummary(s.summary);
+
+            var graphsCode = `
+            <div id="${s.testName}graphBox">
+                <span class="testTitle">${s.testName}</span>
+                <!--
+                <div class="buttonsRow">
+                    <button>All time</button>
+                    <button>Today</button>
+                </div>
+                -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="graph" id="${s.testName}graph"></svg>
+                <!--
+                <div class="graphPreviewBox">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="graphPreview" id="${s.testName}graphPreview"></svg>
+                    <div class="graphLeftControll graphControll" id="${s.testName}graphLHandle"></div>
+                    <div class="graphRightControll graphControll" id="${s.testName}graphRHandle"></div>
+                </div>
+                -->
+            </div>`
+            document.getElementById('graphsBox').innerHTML += graphsCode;
+
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const mainSVG = document.getElementById(`${s.testName}graph`);
+            // let newRect = document.createElementNS(svgNS, 'rect');
+            // newRect.setAttribute("x", "0%");
+            // newRect.setAttribute("y", "0");
+            // newRect.setAttribute("width", "100%");
+            // newRect.setAttribute("height", "100%");
+            // newRect.setAttribute("fill", "#eecc22");
+            // mainSVG.appendChild(newRect);
+
+            function genSVG(psum) {
+                for (key in psum) {
+                    const e = psum[key]; //this element
+                    var r = psum[key][1] //current state(color), 0, 1, 2 or 3
+                    console.log(e);
+                    if (r != 0 && r != 1 && r != 2 && r != 4) { // 0=down, 1=up, 2=test was partially succesful, 3=mysterious error, 4=no data
+                        r = 3;
+                    }
+                    console.log(r);
+                    var color = '';
+                    switch (r) {
+                        case 0:
+                            color = 'rgb(180, 0, 0)'
+                            break;
+                        case 1:
+                            color = 'rgb(0, 180, 0)'
+                            break;
+                        case 2:
+                            color = 'rgb(240, 200, 0)'
+                            break;
+                        case 3:
+                            color = 'rgb(0, 0, 0)'
+                            break;
+                        case 4:
+                            color = 'rgb(230, 230, 230)'
+                            break;
+                        default:
+                            color = 'rgb(0, 180, 0)'
+                            break;
+                    }
+                    let newRect = document.createElementNS(svgNS, 'rect');
+                    newRect.setAttribute("x", `${e[0]*100}%`);
+                    newRect.setAttribute("y", "0");
+                    newRect.setAttribute("width", "100%");
+                    newRect.setAttribute("height", "100%");
+                    newRect.setAttribute("fill", `${color}`);
+                    mainSVG.appendChild(newRect);
+                }
+            }
+            genSVG(s.psummary)
         }
         getLog(this);
         //console.log(`${this.testName} cTest object created.`);
         console.log(this);
     }
-
-    // genPreviewSVG(smry) {
-    //     //console.log(`Generating SVG preview for ${this.testName}`);
-    //     var svg = '';
-    //     var rm = 0; //right most position, adds width of every created rectangle
-    //     const lngth = smry.length
-    //     for (key in smry) {
-    //         if (key < lngth - 1) {
-    //             const e = smry[key]; //this element
-    //             const n = smry[key * 1 + 1]; //next element
-    //             var r = smry[key][1] //current state(color), 0, 1, 2 or 3
-    //             if (r != 0 && r != 1 && r != 2 && r != 4) { // 0=down, 1=up, 2=test was partially succesful, 3=mysterious error, 4=no data
-    //                 r = 3;
-    //             }
-    //             const t = n[0] - e[0] //time difference (width of rectangle)
-    //             const l = rm; //x position of rectangle
-    //             rm += t;
-    //             //console.log(r, l, t);
-    //             var color = '';
-    //             switch (r) {
-    //                 case 0:
-    //                     color = 'rgb(180, 0, 0)'
-    //                     break;
-    //                 case 1:
-    //                     color = 'rgb(0, 180, 0)'
-    //                     break;
-    //                 case 2:
-    //                     color = 'rgb(240, 200, 0)'
-    //                     break;
-    //                 case 4:
-    //                     color = 'rgb(120, 120, 120)'
-    //                 default:
-    //                     color = 'black'
-    //                     break;
-    //             }
-    //             svg += '<rect x="'+l+'" y="40" width="'+t+'" height="10" style="fill: '+color+'; stroke: rgb(180, 40, 100); stroke-width:0; fill-opacity: 1; stroke-opacity: 1;"></rect>';
-    //         }
-    //     }
-    //     //console.log(svg);
-    //     return svg
-    // };
 };
 
 async function main() {
