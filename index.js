@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 
 var curlTestsDefinitions = {};
-var PORT = 8001;
+var PORT = 8080;
 var interval = 10000;
 var command = 'curl';
 var testNames = [];
@@ -170,4 +170,4 @@ function requestListener(req, res) {
 
 const server = http.createServer(requestListener);
 server.listen(PORT);
-console.log(`listening on port ${PORT}`);
+console.log(`listening on port: ${PORT}`);
