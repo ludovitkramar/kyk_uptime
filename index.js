@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 
 var curlTestsDefinitions = {};
-var PORT = 8080;
+var PORT = 8001;
 var interval = 10000;
 var command = 'curl';
 var testNames = [];
