@@ -9,13 +9,22 @@
   <meta name="description" content="Monitor that logs curl test resutls">
   <title>kyk Uptime Logger</title>
   <link rel="stylesheet" href="/style.css">
+  <script src="https://d3js.org/d3.v7.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-array@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-color@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-format@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-time@3" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-time-format@4" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-scale@4" defer></script>
+  <script src="script.js" defer></script>
 </head>
 
 <body>
   <div class="max-w-3xl m-auto">
     <header class="p-2 m-3 shadow shadow-cyan-600 rounded-md bg-cyan-50">
       <h1 class="text-3xl text-cyan-900">kyk Uptime Monitor</h1>
-      <span class="text-cyan-700">Log curl test resutls easily</span>
+      <span class="text-cyan-700">easily log curl tests</span>
     </header>
     <fieldset id="overview" class="m-3 p-3 pt-1 border border-cyan-600 rounded-md">
       <legend class="px-2 text-lg text-cyan-800">Overview</legend>
@@ -38,9 +47,6 @@
       </ul>
     </footer>
   </div>
-  <script src="script.js">
-
-  </script>
 </body>
 
 </html>

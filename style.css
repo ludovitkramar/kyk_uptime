@@ -665,6 +665,10 @@ video {
   display: inline-block;
 }
 
+.flex {
+  display: flex;
+}
+
 .w-2\/4 {
   width: 50%;
 }

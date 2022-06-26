@@ -11,13 +11,16 @@ class cTest {
                 headers: { "Content-Type": "text/plain" }
             });
             const logs = await res.text();
+            //console.log(logs);
             function cleanLOGs(txt) {
                 txt = txt.replaceAll('\r\n', ',')
                 txt = txt.slice(0, txt.lastIndexOf(',')) + "]"
                 return JSON.parse(txt);
             }
             s.log = cleanLOGs(`[${logs}]`);
-            function makeSummary(log, interval) {
+            console.log(s.log);
+
+            function makeSummary(log, interval) { //this function produces bad result, should not be used, BUT it modifies the original s.log object and THAT is needed
                 var lastState = 999;
                 var lastTime = log[0][0];
                 const timeAllowance = interval * 1.1;
@@ -31,106 +34,121 @@ class cTest {
                     if (e[1] != lastState || loggerWasDown) {
                         if (loggerWasDown) {
                             const timeStamp = log[key * 1 - 1][0]
-                            summary.push([timeStamp, 4])
+                            //summary.push([timeStamp, 4])
+                            const dataObj = { 'time': timeStamp, 'state': 4, }
+                            summary.push(dataObj);
                         }
-                        summary.push(e);
+                        const r = e[1]
+                        if (r != 0 && r != 1 && r != 2 && r != 4) { // 0=down, 1=up, 2=test was partially succesful, 3=mysterious error, 4=no data
+                            e[1] = 3; //set to three if input was something else
+                        }
+                        const dataObj = { 'time': e[0], 'state': e[1], }
+                        summary.push(dataObj);
                         lastState = e[1];
                     }
                     lastTime = e[0];
                 }
-                summary.push(log[log.length - 1]);
+                const e = log[log.length - 1];
+                summary.push({ 'time': e[0], 'state': e[1], });
                 return summary
             }
             s.summary = makeSummary(s.log, s.interval); //create a summary
 
-            function makePercentagesSummary(summary) {
-                // console.log(summary);
-                const first = summary[0][0];
-                const last = summary[summary.length - 1][0];
-                // console.log(first, last);
-                const dif = last - first;
-                function perc(cur) {
-                    return (cur - first) / dif;
-                }
-                let psum = [];
-                for (let index = 0; index < summary.length; index++) {
-                    const element = summary[index];
-                    psum.push([Math.round(perc(element[0]) * 10000) / 10000, element[1]]);
-                }
-                return psum;
-            }
-            s.psummary = makePercentagesSummary(s.summary);
-
             var graphsCode = `
             <div id="${s.testName}graphBox">
                 <span class="testTitle">${s.testName}</span>
-                <!--
-                <div class="buttonsRow">
-                    <button>All time</button>
-                    <button>Today</button>
-                </div>
-                -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="graph" id="${s.testName}graph"></svg>
-                <!--
-                <div class="graphPreviewBox">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="graphPreview" id="${s.testName}graphPreview"></svg>
-                    <div class="graphLeftControll graphControll" id="${s.testName}graphLHandle"></div>
-                    <div class="graphRightControll graphControll" id="${s.testName}graphRHandle"></div>
-                </div>
-                -->
+                <svg class="" id="${s.testName}graph" viewbox="0 0 800 400"></svg>
             </div>`
             document.getElementById('graphsBox').innerHTML += graphsCode;
 
             const svgNS = 'http://www.w3.org/2000/svg';
-            const mainSVG = document.getElementById(`${s.testName}graph`);
-            // let newRect = document.createElementNS(svgNS, 'rect');
-            // newRect.setAttribute("x", "0%");
-            // newRect.setAttribute("y", "0");
-            // newRect.setAttribute("width", "100%");
-            // newRect.setAttribute("height", "100%");
-            // newRect.setAttribute("fill", "#eecc22");
-            // mainSVG.appendChild(newRect);
+            const graphEle = document.getElementById(`${s.testName}graph`);
 
-            function genSVG(psum) {
-                for (key in psum) {
-                    const e = psum[key]; //this element
-                    var r = psum[key][1] //current state(color), 0, 1, 2 or 3
-                    console.log(e);
-                    if (r != 0 && r != 1 && r != 2 && r != 4) { // 0=down, 1=up, 2=test was partially succesful, 3=mysterious error, 4=no data
-                        r = 3;
-                    }
-                    console.log(r);
-                    var color = '';
-                    switch (r) {
-                        case 0:
-                            color = 'rgb(180, 0, 0)'
-                            break;
-                        case 1:
-                            color = 'rgb(0, 180, 0)'
-                            break;
-                        case 2:
-                            color = 'rgb(240, 200, 0)'
-                            break;
-                        case 3:
-                            color = 'rgb(0, 0, 0)'
-                            break;
-                        case 4:
-                            color = 'rgb(230, 230, 230)'
-                            break;
-                        default:
-                            color = 'rgb(0, 180, 0)'
-                            break;
-                    }
-                    let newRect = document.createElementNS(svgNS, 'rect');
-                    newRect.setAttribute("x", `${e[0]*100}%`);
-                    newRect.setAttribute("y", "0");
-                    newRect.setAttribute("width", "100%");
-                    newRect.setAttribute("height", "100%");
-                    newRect.setAttribute("fill", `${color}`);
-                    mainSVG.appendChild(newRect);
-                }
-            }
-            genSVG(s.psummary)
+            console.log(graphEle);
+
+            console.log(d3)
+
+            const DUMMY_DATA = [
+                { id: 'd1', value: 12, region: 'USA' },
+                { id: 'd2', value: 8, region: 'China' },
+                { id: 'd3', value: 10, region: 'Singapore' },
+                { id: 'd4', value: 11, region: 'Germany' },
+                { id: 'd5', value: 14, region: 'Thailand' },
+            ]
+
+            const xScale = d3.scaleBand().domain(DUMMY_DATA.map(dataPoint => dataPoint.region)).rangeRound([0, 250]).padding(0.1);
+            const yScale = d3.scaleLinear().domain([0, 16]).range([400, 0]);
+
+            const container = d3.select(`#${s.testName}graph`)
+                .classed('testClass', true)
+                .style('border', '1px solid red');
+
+            container
+                .selectAll('.bar')
+                .data(DUMMY_DATA)
+                .enter()
+                .append('rect')
+                .style('fill', '#720572')
+                .classed('bar', true)
+                .attr('width', xScale.bandwidth())
+                .attr('height', data => 400 - yScale(data.value))
+                .attr('x', data => xScale(data.region))
+                .attr('y', data => yScale(data.value));
+
+            // d3.select(`#${s.testName}graph`)
+            //     .selectAll('p')
+            //     .data(s.log)
+            //     .enter()
+            //     .append('p')
+            //     .text(dta => [dta[1],dta[0],new Date(dta[0])]);
+
+            // d3.select(`#${s.testName}graph`)
+            //     .selectAll('p')
+            //     .data(s.summary)
+            //     .enter()
+            //     .append('p')
+            //     .text(dta => [dta.state,dta.time,new Date(dta.time)]);
+
+            // function genSVG(psum) {
+            //     for (key in psum) {
+            //         const e = psum[key]; //this element
+            //         var r = psum[key][1] //current state(color), 0, 1, 2 or 3
+            //         //console.log(e);
+            //         if (r != 0 && r != 1 && r != 2 && r != 4) { // 0=down, 1=up, 2=test was partially succesful, 3=mysterious error, 4=no data
+            //             r = 3;
+            //         }
+            //         //console.log(r);
+            //         var color = '';
+            //         switch (r) {
+            //             case 0:
+            //                 color = 'rgb(180, 0, 0)'
+            //                 break;
+            //             case 1:
+            //                 color = 'rgb(0, 180, 0)'
+            //                 break;
+            //             case 2:
+            //                 color = 'rgb(240, 200, 0)'
+            //                 break;
+            //             case 3:
+            //                 color = 'rgb(0, 0, 0)'
+            //                 break;
+            //             case 4:
+            //                 color = 'rgb(230, 230, 230)'
+            //                 break;
+            //             default:
+            //                 color = 'rgb(0, 180, 0)'
+            //                 break;
+            //         }
+            //         let newRect = document.createElementNS(svgNS, 'rect');
+            //         newRect.setAttribute("x", `${e[0]*100}%`);
+            //         newRect.setAttribute("y", "0");
+            //         newRect.setAttribute("width", "100%");
+            //         newRect.setAttribute("height", "100%");
+            //         newRect.setAttribute("fill", `${color}`);
+            //         mainSVG.appendChild(newRect);
+            //     }
+            // }
+            // genSVG(s.psummary)
         }
         getLog(this);
         //console.log(`${this.testName} cTest object created.`);
