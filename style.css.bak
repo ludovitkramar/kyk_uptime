@@ -1,0 +1,149 @@
+@font-face {
+    font-family: 'LMsans10';
+    src: url('/lmsans10-regular.otf')
+ }
+
+:root {
+    --bg: #ffffff;
+    --text: #111111;
+    --titletext: #ffffff;
+    --textalt: #e6e6e6;
+    --blockbg: #f2f2f2;
+    --blockbgalt: #5c5c5c;
+    --textAccent: #00AAD4;
+    --accentA: #03acd6;
+    --accentB: #3aad3a;
+    --gradientA1: #0079D6;
+    --gradientA2: #00C9FE;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1b1b1b;
+        --text: #ececec;
+        --titletext: #ffffff;
+        --textalt: #e6e6e6;
+        --blockbg: #363636;
+        --blockbgalt: #4d4d4d;
+        --textAccent: #2dc7ee;
+        --accentA: #1a5463;
+        --accentB: #205a20;
+        --gradientA1: #0079D6;
+        --gradientA2: #00C9FE;
+    }
+}
+
+* {
+    margin: 0;
+    font-family: 'LMsans10';
+    color: var(--text);
+}
+  
+html,body{
+    min-height: 100%
+}
+
+body {
+    background-color: var(--bg);
+}
+
+body > div {
+    width: 50em;
+    margin: 0 auto;
+}
+
+svg {
+    width: 100%;
+}
+
+svg.graph {
+    height: 5em;
+    background-color: var(--blockbg);
+}
+
+svg.graphPreview {
+    height: 40px;
+    background-color: var(--blockbg);
+}
+
+div.graphPreviewBox {
+    position: relative;
+}
+
+div.graphControll {
+    width: 10px;
+    background-color: var(--blockbgalt);
+    border: 1px solid var(--text);
+    height: 100%;
+    max-height: 100%;
+    cursor: grab;
+    top: 0;
+}
+
+div.graphControll:active {
+    cursor: grabbing;
+}
+
+div.graphLeftControll {
+    position:absolute;
+    left: 0;
+}
+
+div.graphLeftControll::after {
+    content: '2021-10-23';
+    background-color: violet;
+    border: 1px solid yellow;
+    width: max-content;
+    position: absolute;
+    max-width: 30vw;
+    left: 0;
+}
+
+div.graphRightControll {
+    position: absolute;
+    right: 0;
+}
+
+div.graphRightControll::after {
+    content: '2021-11-22';
+    background-color: violet;
+    border: 1px solid yellow;
+    width: max-content;
+    position: absolute;
+    max-width: 30vw;
+    right: 0;
+    bottom: 0;
+}
+
+code {
+    font-family: monospace;
+    background-color: var(--blockbg);
+}
+
+footer {
+    text-align: center;
+    background-color: var(--blockbgalt);
+    padding: .6em;
+    padding-bottom: 1em;
+    margin-top: .3em;
+}
+
+footer > ul > li {
+    display: inline;
+    margin-right: .3em;
+    color: var(--textalt);
+    font-size: .88em;
+}
+
+footer > ul > li > a {
+    color: var(--textalt);
+}
+
+@media screen and (max-width: 50em) {
+    body > div {
+        width: auto;
+        margin: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

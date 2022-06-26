@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ludovitkramar/kyk_uptime/issues"
   },
-  "homepage": "https://github.com/ludovitkramar/kyk_uptime#readme"
+  "homepage": "https://github.com/ludovitkramar/kyk_uptime#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.1.4"
+  }
 }

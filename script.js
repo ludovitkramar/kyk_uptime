@@ -159,10 +159,10 @@ async function main() {
     }
 
     function populateOverview(testNames, interval) {
-        var str = `<span>There are ${testNames.length} tests being performed every ${Math.round(interval / 1000)} seconds:</span><ol>`;
+        var str = `<span class="">There are <span class="bg-cyan-700 text-cyan-100 pl-1 pr-1">${testNames.length}</span> tests being performed every <span class="bg-cyan-700 text-cyan-100 pl-1 pr-1">${Math.round(interval / 1000)}</span> seconds:</span><ol class="list-decimal ml-8">`;
         for (key in testNames) {
             //console.log(eval(`${testNames[key] + "Test"}`));
-            str += `<li>${testNames[key]}</li>`
+            str += `<li class="m-0.5">${testNames[key]}</li>`
         }
         str += `</ol>`
         document.getElementById('overview').innerHTML += str;
@@ -177,11 +177,11 @@ async function main() {
             lc[`${element}Test`].forEach(e => { args += `${e} ` })
             expct = "";
             lc[`${element}Expected`].forEach(e => { expct += `<li><code>${e}</code></li>` })
-            str += `<span>${element}</span>
-            <ul>
-                <li>Test command: <code>${lc["COMMAND"]} ${args} </code></li>
+            str += `<span class="text-lg block m-0.5 text-cyan-800">${element}</span>
+            <ul class="list-disc ml-7">
+                <li>Test command: <code class="rounded-md border border-slate-300 bg-slate-100 text-sm p-1 pb-0 text-slate-700">${lc["COMMAND"]} ${args} </code></li>
                 <li>Response should contain:</li>
-                <ul>
+                <ul class="rounded-md shadow-sm shadow-slate-400 bg-slate-100 text-sm p-1 mb-1 text-slate-700">
                     ${expct}
                 </ul>
             </ul>`;
