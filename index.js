@@ -45,6 +45,9 @@ class curlTest {
     curlTest.stderr.on('data', (data) => {
       //console.log('curl error:' + data)
       this.errorLog([Date.now(), 'stderr', data.toString()]);
+      var result = this.processData(data);
+      var toLog = ([Date.now(), result]);
+      this.storeLog(toLog);
     })
     console.log(`A test has been performed for ${this.testName}.`);
   }
