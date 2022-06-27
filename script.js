@@ -18,9 +18,9 @@ class cTest {
                 return JSON.parse(txt);
             }
             s.log = cleanLOGs(`[${logs}]`);
-            console.log(s.log);
+            //console.log(s.log);
 
-            function makeSummary(log, interval) { //this function produces bad result, should not be used, BUT it modifies the original s.log object and THAT is needed
+            function makeSummary(log, interval) { //this function produces bad result, s.summary should not be used, BUT it modifies the original s.log object and THAT is needed
                 var lastState = 999;
                 var lastTime = log[0][0];
                 const timeAllowance = interval * 1.1;
@@ -56,44 +56,55 @@ class cTest {
 
             var graphsCode = `
             <div id="${s.testName}graphBox">
-                <span class="testTitle">${s.testName}</span>
-                <svg class="" id="${s.testName}graph" viewbox="0 0 800 400"></svg>
+                <span class="text-md block m-0.5 text-slate-800">${s.testName}</span>
+                <svg class="" id="${s.testName}graph" viewbox="0 0 800 80"></svg>
             </div>`
             document.getElementById('graphsBox').innerHTML += graphsCode;
 
             const svgNS = 'http://www.w3.org/2000/svg';
             const graphEle = document.getElementById(`${s.testName}graph`);
 
-            console.log(graphEle);
+            //console.log(graphEle);
 
-            console.log(d3)
+            //console.log(d3)
 
-            const DUMMY_DATA = [
-                { id: 'd1', value: 12, region: 'USA' },
-                { id: 'd2', value: 8, region: 'China' },
-                { id: 'd3', value: 10, region: 'Singapore' },
-                { id: 'd4', value: 11, region: 'Germany' },
-                { id: 'd5', value: 14, region: 'Thailand' },
-            ]
-
-            const xScale = d3.scaleBand().domain(DUMMY_DATA.map(dataPoint => dataPoint.region)).rangeRound([0, 250]).padding(0.1);
-            const yScale = d3.scaleLinear().domain([0, 16]).range([400, 0]);
+            //const xScale = d3.scaleBand().domain(s.log.map(dataPoint => dataPoint[0])).rangeRound([0, 800]).padding(0);
+            const xDomain = [s.log[0][0], s.log[s.log.length - 1][0]]
+            const xScale = d3.scaleLinear().domain(xDomain).range([0, 800]);
+            //const yScale = d3.scaleLinear().domain(s.log.map(dataPoint => dataPoint[0])).range([0, 800]);
 
             const container = d3.select(`#${s.testName}graph`)
-                .classed('testClass', true)
-                .style('border', '1px solid red');
+                .classed('shadow', true)
+                .classed('shadow-slate-400', true)
+                .style('border-radius', '3px')
+                .style('padding', '2px');
+
+            function getColor(v) {
+                switch (v) {
+                    case 0:
+                        return '#ff2000'
+                    case 1:
+                        return '#20a070'
+                    case 2:
+                        return '#dddd22'
+                    case 3:
+                        return '#dd3322'
+                    default:
+                        return '#000000'
+                }
+            }
 
             container
                 .selectAll('.bar')
-                .data(DUMMY_DATA)
+                .data(s.log)
                 .enter()
                 .append('rect')
-                .style('fill', '#720572')
+                .style('fill', data => getColor(data[1]))
                 .classed('bar', true)
-                .attr('width', xScale.bandwidth())
-                .attr('height', data => 400 - yScale(data.value))
-                .attr('x', data => xScale(data.region))
-                .attr('y', data => yScale(data.value));
+                .attr('width', '1')
+                .attr('height', '80px')
+                .attr('y', 0)
+                .attr('x', data => xScale(data[0]));
 
             // d3.select(`#${s.testName}graph`)
             //     .selectAll('p')
